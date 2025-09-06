@@ -267,10 +267,29 @@
         .role-staff .staff-element { display: block; }
         .role-manager .manager-element { display: block; }
         .role-hr .hr-element { display: block; }
+
+        /* Notification Styling */
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        .notification-badge {
+            position: absolute; top: -5px; right: -5px; background: var(--danger);
+            color: white; border-radius: 50%; width: 18px; height: 18px;
+            font-size: 11px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Responsive table for approve/reject buttons */
+        @media (max-width: 600px) {
+            .table-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- AUTH PAGE (LOGIN/REGISTER) -->
     <div id="auth-page">
         <div class="auth-box fade-in">
             <div class="auth-header">
@@ -283,7 +302,6 @@
                 <div class="auth-tab" id="register-tab">Register</div>
             </div>
             
-            <!-- LOGIN FORM -->
             <form id="login-form">
                 <div class="form-group">
                     <label for="login-username"><i class="fas fa-user"></i> Username</label>
@@ -298,7 +316,6 @@
                 </button>
             </form>
             
-            <!-- REGISTER FORM -->
             <form id="register-form" class="hidden">
                 <div class="form-group">
                     <label for="register-name"><i class="fas fa-user"></i> Full Name</label>
@@ -339,9 +356,7 @@
         </div>
     </div>
 
-    <!-- MAIN APPLICATION -->
     <div id="app" class="hidden">
-        <!-- SIDEBAR -->
         <div id="sidebar">
             <div class="sidebar-header">
                 <h2>NOSDRA LMS</h2>
@@ -352,10 +367,10 @@
                 <a href="#" class="menu-item active" data-page="dashboard">
                     <i class="fas fa-home"></i> <span>Dashboard</span>
                 </a>
-                <a href="#" class="menu-item" data-page="leave-apply">
+                <a href="#" class="menu-item staff-element" data-page="leave-apply">
                     <i class="fas fa-calendar-plus"></i> <span>Apply for Leave</span>
                 </a>
-                <a href="#" class="menu-item" data-page="leave-status">
+                <a href="#" class="menu-item staff-element" data-page="leave-status">
                     <i class="fas fa-history"></i> <span>My Applications</span>
                 </a>
                 <a href="#" class="menu-item manager-element hr-element" data-page="manage-leave">
@@ -373,9 +388,7 @@
             </div>
         </div>
         
-        <!-- MAIN CONTENT -->
         <div id="main-content">
-            <!-- TOP HEADER -->
             <div id="top-header">
                 <div class="header-left">
                     <h1><i class="fas fa-oil-can"></i> NOSDRA Leave Management</h1>
@@ -393,13 +406,11 @@
                 </div>
             </div>
             
-            <!-- CONTENT AREA -->
             <div id="content">
-                <!-- DASHBOARD PAGE -->
                 <div id="dashboard-page" class="page">
                     <div class="page-header">
                         <h2 class="page-title"><i class="fas fa-home"></i> Dashboard</h2>
-                        <div class="page-actions">
+                        <div class="page-actions staff-element">
                             <button class="btn btn-primary" onclick="showPage('leave-apply')">
                                 <i class="fas fa-plus"></i> Apply for Leave
                             </button>
@@ -412,7 +423,7 @@
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
                             <div class="stat-info">
-                                <h3 id="annual-balance">21</h3>
+                                <h3 id="annual-balance">0</h3>
                                 <p>Annual Leave Days</p>
                             </div>
                         </div>
@@ -422,7 +433,7 @@
                                 <i class="fas fa-umbrella-beach"></i>
                             </div>
                             <div class="stat-info">
-                                <h3 id="casual-balance">7</h3>
+                                <h3 id="casual-balance">0</h3>
                                 <p>Casual Leave Days</p>
                             </div>
                         </div>
@@ -432,7 +443,7 @@
                                 <i class="fas fa-first-aid"></i>
                             </div>
                             <div class="stat-info">
-                                <h3 id="sick-balance">10</h3>
+                                <h3 id="sick-balance">0</h3>
                                 <p>Sick Leave Days</p>
                             </div>
                         </div>
@@ -449,8 +460,7 @@
                     </div>
                     
                     <div class="dashboard-grid">
-                        <!-- Quick Actions Card -->
-                        <div class="card">
+                        <div class="card staff-element">
                             <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
                             <div style="margin-top: 15px;">
                                 <button class="btn btn-primary btn-block" onclick="showPage('leave-apply')">
@@ -462,7 +472,6 @@
                             </div>
                         </div>
                         
-                        <!-- Recent Activity Card -->
                         <div class="card">
                             <h3><i class="fas fa-history"></i> Recent Activity</h3>
                             <div class="recent-activity" id="recent-activity">
@@ -481,7 +490,6 @@
                     </div>
                 </div>
                 
-                <!-- APPLY FOR LEAVE PAGE -->
                 <div id="leave-apply-page" class="page hidden">
                     <div class="page-header">
                         <h2 class="page-title"><i class="fas fa-calendar-plus"></i> Apply for Leave</h2>
@@ -527,7 +535,6 @@
                     </div>
                 </div>
                 
-                <!-- LEAVE STATUS PAGE -->
                 <div id="leave-status-page" class="page hidden">
                     <div class="page-header">
                         <h2 class="page-title"><i class="fas fa-history"></i> My Leave Applications</h2>
@@ -564,12 +571,69 @@
                         </table>
                     </div>
                 </div>
-                
-            </div> <!-- /#content -->
-        </div> <!-- /#main-content -->
-    </div> <!-- /#app -->
 
-    <script>
+                <div id="manage-leave-page" class="page hidden manager-element hr-element">
+                    <div class="page-header">
+                        <h2 class="page-title"><i class="fas fa-tasks"></i> Approve Leave Applications</h2>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">Pending Applications</div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Leave Type</th>
+                                    <th>Duration</th>
+                                    <th>Reason</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-applications-list">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 30px; color: var(--gray);">
+                                        <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                                        No pending leave applications.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="staff-management-page" class="page hidden hr-element">
+                    <div class="page-header">
+                        <h2 class="page-title"><i class="fas fa-users"></i> Staff Management</h2>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-title">All Staff</div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Department</th>
+                                    <th>Role</th>
+                                    <th>Leave Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staff-list">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray);">
+                                        <i class="fas fa-user-friends" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                                        No staff members found.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div> </div> </div> <script>
         // ===== DATA STORAGE =====
         let currentUser = null;
         let allUsers = JSON.parse(localStorage.getItem('nosdra_users')) || {};
@@ -581,23 +645,42 @@
             initializeAuthTabs();
             initializeDateInputs();
             checkSavedSession();
+            // Attach event listeners for manager/hr functions
+            document.getElementById('pending-applications-list').addEventListener('click', handleApproveReject);
         });
 
         function initializeAuthTabs() {
             // Tab switching
-            document.getElementById('login-tab').addEventListener('click', () => switchAuthTab('login'));
-            document.getElementById('register-tab').addEventListener('click', () => switchAuthTab('register'));
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+            
+            loginTab.addEventListener('click', () => switchAuthTab('login'));
+            registerTab.addEventListener('click', () => switchAuthTab('register'));
             
             // Form submissions
             document.getElementById('login-form').addEventListener('submit', handleLogin);
             document.getElementById('register-form').addEventListener('submit', handleRegistration);
             
-            // Switch link
-            document.getElementById('auth-switch-link').addEventListener('click', function(e) {
-                e.preventDefault();
-                const currentTab = document.getElementById('login-form').classList.contains('hidden') ? 'login' : 'register';
-                switchAuthTab(currentTab === 'login' ? 'register' : 'login');
-            });
+            // Initial switch link setup
+            updateAuthSwitchLink();
+        }
+
+        function updateAuthSwitchLink() {
+            const authSwitchLink = document.getElementById('auth-switch-link');
+            if (authSwitchLink) {
+                authSwitchLink.removeEventListener('click', handleAuthSwitch);
+            }
+            document.getElementById('auth-switch-text').innerHTML = document.getElementById('login-form').classList.contains('hidden') 
+                ? 'Already have an account? <a href="#" id="auth-switch-link">Login here</a>'
+                : 'Don\'t have an account? <a href="#" id="auth-switch-link">Register here</a>';
+            
+            document.getElementById('auth-switch-link').addEventListener('click', handleAuthSwitch);
+        }
+
+        function handleAuthSwitch(e) {
+            e.preventDefault();
+            const isLogin = document.getElementById('login-form').classList.contains('hidden');
+            switchAuthTab(isLogin ? 'login' : 'register');
         }
 
         function switchAuthTab(tab) {
@@ -607,23 +690,15 @@
             document.getElementById('login-tab').classList.toggle('active', isLogin);
             document.getElementById('register-tab').classList.toggle('active', !isLogin);
             
-            document.getElementById('auth-switch-text').innerHTML = isLogin 
-                ? 'Don\'t have an account? <a href="#" id="auth-switch-link">Register here</a>'
-                : 'Already have an account? <a href="#" id="auth-switch-link">Login here</a>';
-            
-            // Re-attach event listener to the new link
-            document.getElementById('auth-switch-link').addEventListener('click', function(e) {
-                e.preventDefault();
-                switchAuthTab(isLogin ? 'register' : 'login');
-            });
+            updateAuthSwitchLink();
         }
 
         function initializeDateInputs() {
             const today = new Date();
-            document.getElementById('start-date').valueAsDate = today;
             const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            document.getElementById('end-date').valueAsDate = tomorrow;
+            tomorrow.setDate(today.getDate() + 1);
+            document.getElementById('start-date').value = today.toISOString().split('T')[0];
+            document.getElementById('end-date').value = tomorrow.toISOString().split('T')[0];
         }
 
         function checkSavedSession() {
@@ -687,9 +762,9 @@
             localStorage.setItem('nosdra_users', JSON.stringify(allUsers));
             
             // Add activity
-            addActivity('user_registered', `${name} registered new account`);
+            addActivity('user_registered', `${name} registered new account`, 'system');
             
-            showNotification('Account created successfully! Please login.', 'success');
+            showNotification('Account created successfully! Please login.');
             switchAuthTab('login');
             document.getElementById('login-username').value = username;
             document.getElementById('register-form').reset();
@@ -706,7 +781,7 @@
             }));
             
             // Add activity
-            addActivity('user_login', `${userData.name} logged in`);
+            addActivity('user_login', `${userData.name} logged in`, username);
             
             // Update UI
             document.getElementById('auth-page').classList.add('hidden');
@@ -727,19 +802,21 @@
             // Update role-based UI
             document.getElementById('app').className = 'role-' + currentUser.role;
             
-            // Update leave balances
+            // Update leave balances and applications
             if (currentUser.leaveBalance) {
                 document.getElementById('annual-balance').textContent = currentUser.leaveBalance.annual;
                 document.getElementById('casual-balance').textContent = currentUser.leaveBalance.casual;
                 document.getElementById('sick-balance').textContent = currentUser.leaveBalance.sick;
             }
-            
-            // Update applications
+
             updateApplicationsList();
+            updatePendingApplications();
             updateRecentActivities();
+            updateStaffList();
         }
 
         function getInitials(name) {
+            if (!name) return '??';
             return name.split(' ').map(word => word[0]).join('').toUpperCase().substring(0, 2);
         }
 
@@ -750,11 +827,17 @@
             const startDate = new Date(document.getElementById('start-date').value);
             const endDate = new Date(document.getElementById('end-date').value);
             const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+            if (days <= 0 || isNaN(days)) {
+                showNotification('End date must be after or the same as the start date.', 'error');
+                return;
+            }
             
             const newApplication = {
                 id: Date.now(),
                 applicant: currentUser.username,
                 applicantName: currentUser.name,
+                department: currentUser.department,
                 type: document.getElementById('leave-type').value,
                 startDate: document.getElementById('start-date').value,
                 endDate: document.getElementById('end-date').value,
@@ -762,4 +845,327 @@
                 status: 'Pending',
                 approvedBy: '',
                 days: days,
-                appliedDate: new Date
+                appliedDate: new Date().toISOString()
+            };
+            
+            allLeaveApplications.push(newApplication);
+            localStorage.setItem('nosdra_leave_apps', JSON.stringify(allLeaveApplications));
+            
+            // Add activity
+            addActivity('leave_applied', `${currentUser.name} applied for ${newApplication.type} leave`, currentUser.username);
+            
+            showNotification('Leave application submitted successfully!');
+            this.reset();
+            initializeDateInputs();
+            updateApplicationsList();
+            updatePendingApplications();
+            showPage('dashboard');
+        });
+
+        function updateApplicationsList() {
+            const applicationsList = document.getElementById('applications-list');
+            const userApplications = allLeaveApplications.filter(app => app.applicant === currentUser.username);
+            
+            if (userApplications.length === 0) {
+                applicationsList.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray);">
+                            <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            No leave applications yet. <a href="#" onclick="showPage('leave-apply')">Apply for leave</a> to get started.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            userApplications.forEach(app => {
+                const statusClass = app.status.toLowerCase().replace(' ', '-');
+                html += `
+                    <tr>
+                        <td>${app.type}</td>
+                        <td>${formatDate(app.startDate)}</td>
+                        <td>${formatDate(app.endDate)}</td>
+                        <td>${app.days} days</td>
+                        <td><span class="badge badge-${statusClass}">${app.status}</span></td>
+                    </tr>
+                `;
+            });
+            
+            applicationsList.innerHTML = html;
+        }
+
+        // ===== MANAGER/HR FUNCTIONS =====
+        function updatePendingApplications() {
+            const pendingList = document.getElementById('pending-applications-list');
+            const pendingApps = allLeaveApplications.filter(app => app.status === 'Pending');
+            
+            document.getElementById('pending-applications').textContent = pendingApps.length;
+            const pendingBadge = document.getElementById('pending-badge');
+            if (pendingApps.length > 0) {
+                pendingBadge.textContent = pendingApps.length;
+                pendingBadge.style.display = 'flex';
+            } else {
+                pendingBadge.style.display = 'none';
+            }
+            
+            if (pendingApps.length === 0) {
+                pendingList.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--gray);">
+                            <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            No pending leave applications.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            pendingApps.forEach(app => {
+                html += `
+                    <tr>
+                        <td>${app.applicantName}</td>
+                        <td>${app.department}</td>
+                        <td>${app.type}</td>
+                        <td>${app.days} days</td>
+                        <td>${app.reason}</td>
+                        <td class="table-actions">
+                            <button class="btn btn-success btn-sm" data-id="${app.id}" data-action="approve">Approve</button>
+                            <button class="btn btn-danger btn-sm" data-id="${app.id}" data-action="reject">Reject</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            pendingList.innerHTML = html;
+        }
+
+        function handleApproveReject(e) {
+            const target = e.target;
+            if (target.tagName !== 'BUTTON') return;
+            
+            const appId = parseInt(target.dataset.id);
+            const action = target.dataset.action;
+            const application = allLeaveApplications.find(app => app.id === appId);
+            
+            if (!application) return;
+
+            if (action === 'approve') {
+                const applicantUser = allUsers[application.applicant];
+                const leaveType = application.type.toLowerCase();
+                if (applicantUser.leaveBalance[leaveType] >= application.days) {
+                    applicantUser.leaveBalance[leaveType] -= application.days;
+                    application.status = 'Approved';
+                    application.approvedBy = currentUser.name;
+                    showNotification(`Application for ${application.applicantName} approved.`);
+                    addActivity('leave_approved', `${application.applicantName}'s ${application.type} leave approved by ${currentUser.name}`, currentUser.username);
+                } else {
+                    showNotification('Not enough leave balance.', 'error');
+                    return;
+                }
+            } else if (action === 'reject') {
+                application.status = 'Rejected';
+                application.approvedBy = currentUser.name;
+                showNotification(`Application for ${application.applicantName} rejected.`, 'error');
+                addActivity('leave_rejected', `${application.applicantName}'s ${application.type} leave rejected by ${currentUser.name}`, currentUser.username);
+            }
+            
+            localStorage.setItem('nosdra_leave_apps', JSON.stringify(allLeaveApplications));
+            localStorage.setItem('nosdra_users', JSON.stringify(allUsers));
+            
+            updateUserInterface();
+        }
+
+        function updateStaffList() {
+            const staffList = document.getElementById('staff-list');
+            const allStaff = Object.values(allUsers);
+            
+            if (allStaff.length === 0) {
+                staffList.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray);">
+                            <i class="fas fa-user-friends" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            No staff members found.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            allStaff.forEach(user => {
+                html += `
+                    <tr>
+                        <td>${user.name}</td>
+                        <td>${user.username}</td>
+                        <td>${user.department}</td>
+                        <td><span class="badge badge-${user.role === 'hr' ? 'primary' : 'secondary'}">${user.role}</span></td>
+                        <td>Annual: ${user.leaveBalance.annual}, Casual: ${user.leaveBalance.casual}, Sick: ${user.leaveBalance.sick}</td>
+                    </tr>
+                `;
+            });
+            staffList.innerHTML = html;
+        }
+
+        // ===== ACTIVITY LOG FUNCTIONS =====
+        function updateRecentActivities() {
+            const activityContainer = document.getElementById('recent-activity');
+            const userActivities = allActivities.filter(act => 
+                act.user === currentUser?.username || act.user === 'system'
+            ).slice(-5).reverse();
+            
+            if (userActivities.length === 0) {
+                activityContainer.innerHTML = `
+                    <div class="activity-item">
+                        <div class="activity-icon stat-secondary">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Welcome to NOSDRA LMS</h4>
+                            <p>You have successfully logged in to the Leave Management System</p>
+                            <div class="activity-time">Just now</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            userActivities.forEach(act => {
+                html += `
+                    <div class="activity-item">
+                        <div class="activity-icon stat-secondary">
+                            <i class="fas fa-${getActivityIcon(act.type)}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>${act.message}</h4>
+                            <div class="activity-time">${formatTime(act.timestamp)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            activityContainer.innerHTML = html;
+        }
+
+        function addActivity(type, message, user) {
+            const activity = {
+                type: type,
+                message: message,
+                user: user,
+                timestamp: new Date().toISOString()
+            };
+            
+            allActivities.push(activity);
+            localStorage.setItem('nosdra_activities', JSON.stringify(allActivities));
+            
+            if (currentUser) {
+                updateRecentActivities();
+            }
+        }
+
+        function getActivityIcon(type) {
+            const icons = {
+                'user_login': 'sign-in-alt',
+                'user_registered': 'user-plus',
+                'leave_applied': 'paper-plane',
+                'leave_approved': 'check-circle',
+                'leave_rejected': 'times-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString();
+        }
+
+        function formatTime(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diff = now - time;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 1) return 'Just now';
+            if (minutes < 60) return `${minutes} min ago`;
+            if (hours < 24) return `${hours} hr ago`;
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+            return time.toLocaleDateString();
+        }
+
+        // ===== NAVIGATION =====
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+            const pageToShow = document.getElementById(pageId + '-page');
+            if (pageToShow) {
+                pageToShow.classList.remove('hidden');
+            }
+            
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            const activeItem = document.querySelector(`[data-page="${pageId}"]`);
+            if (activeItem) activeItem.classList.add('active');
+            
+            // Update lists when pages are shown
+            if (pageId === 'leave-status') {
+                updateApplicationsList();
+            } else if (pageId === 'manage-leave') {
+                updatePendingApplications();
+            } else if (pageId === 'staff-management') {
+                updateStaffList();
+            }
+        }
+
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage(this.getAttribute('data-page'));
+            });
+        });
+
+        // ===== NOTIFICATION SYSTEM =====
+        function showNotification(message, type = 'success') {
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                clearTimeout(existingNotification.timeout);
+                existingNotification.remove();
+            }
+
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.cssText = `
+                position: fixed; top: 20px; right: 20px; padding: 15px 20px;
+                border-radius: 6px; color: white; z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: fadeIn 0.3s ease;
+                max-width: 350px; font-weight: 500; background: ${type === 'error' ? '#dc3545' : '#28a745'};
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            notification.timeout = setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // ===== LOGOUT FUNCTIONALITY =====
+        document.getElementById('user-menu').addEventListener('click', function() {
+            // No direct logout, we need a dropdown menu here. For simplicity, we'll use a confirm box.
+            if (confirm('Are you sure you want to logout?')) {
+                addActivity('user_logout', `${currentUser.name} logged out`, currentUser.username);
+                currentUser = null;
+                localStorage.removeItem('current_user');
+                document.getElementById('app').classList.add('hidden');
+                document.getElementById('auth-page').classList.remove('hidden');
+                document.getElementById('login-form').reset();
+                showNotification('You have been logged out successfully.');
+            }
+        });
+    </script>
+</body>
+</html>
